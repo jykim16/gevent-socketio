@@ -47,7 +47,7 @@ def default_error_handler(socket, error_name, error_message, endpoint,
         socket.send_packet(pkt)
         
     # Log that error somewhere for debugging...
-    log.error(u"default_error_handler: {}, {} (endpoint={}, msg_id={})".format(
+    log.error("default_error_handler: {}, {} (endpoint={}, msg_id={})".format(
         error_name, error_message, endpoint, msg_id
     ))
 
@@ -311,7 +311,7 @@ class Socket(object):
                        :meth:`~socketio.namespace.BaseNamespace.disconnect`
                        calls.
         """
-        for ns_name, ns in list(self.active_ns.iteritems()):
+        for ns_name, ns in list(self.active_ns.items()):
             ns.recv_disconnect()
 
     def remove_namespace(self, namespace):
@@ -362,7 +362,7 @@ class Socket(object):
                 continue  # or close the connection ?
             try:
                 pkt = packet.decode(rawdata, self.json_loads)
-            except (ValueError, KeyError, Exception), e:
+            except (ValueError, KeyError, Exception) as e:
                 self.error('invalid_packet',
                     "There was a decoding error when dealing with packet "
                     "with event: %s... (%s)" % (rawdata[:20], e))
@@ -436,7 +436,7 @@ class Socket(object):
         while True:
             gevent.sleep(1.0)
             if not self.connected:
-                for ns_name, ns in list(self.active_ns.iteritems()):
+                for ns_name, ns in list(self.active_ns.items()):
                     ns.recv_disconnect()
                 # Killing Socket-level jobs
                 gevent.killall(self.jobs)

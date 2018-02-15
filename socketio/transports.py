@@ -1,6 +1,6 @@
 import gevent
-import urllib
-import urlparse
+import urllib.request, urllib.parse, urllib.error
+import urllib.parse
 from geventwebsocket import WebSocketError
 from gevent.queue import Empty
 
@@ -104,7 +104,7 @@ class XHRPollingTransport(BaseTransport):
         if len(messages) == 1:
             return messages[0].encode('utf-8')
 
-        payload = u''.join([(u'\ufffd%d\ufffd%s' % (len(p), p))
+        payload = ''.join([('\ufffd%d\ufffd%s' % (len(p), p))
                             for p in messages if p is not None])
         # FIXME: why is it so that we must filter None from here ?  How
         #        is it even possible that a None gets in there ?
@@ -119,7 +119,7 @@ class XHRPollingTransport(BaseTransport):
 
         The semantics are:
 
-          \ufffd + [length as a string] + \ufffd + [payload as a unicode string]
+          \\ufffd + [length as a string] + \\ufffd + [payload as a unicode string]
 
         This function returns a list of messages, even though there is only
         one.
@@ -127,10 +127,10 @@ class XHRPollingTransport(BaseTransport):
         Inspired by socket.io/lib/transports/http.js
         """
         payload = payload.decode('utf-8')
-        if payload[0] == u"\ufffd":
+        if payload[0] == "\ufffd":
             ret = []
             while len(payload) != 0:
-                len_end = payload.find(u"\ufffd", 1)
+                len_end = payload.find("\ufffd", 1)
                 length = int(payload[1:len_end])
                 msg_start = len_end + 1
                 msg_end = length + msg_start
@@ -162,7 +162,7 @@ class JSONPolling(XHRPollingTransport):
     def _request_body(self):
         data = super(JSONPolling, self)._request_body()
         # resolve %20%3F's, take out wrapping d="...", etc..
-        data = urllib.unquote_plus(data)[3:-1] \
+        data = urllib.parse.unquote_plus(data)[3:-1] \
                      .replace(r'\"', '"') \
                      .replace(r"\\", "\\")
 
@@ -175,7 +175,7 @@ class JSONPolling(XHRPollingTransport):
 
     def write(self, data):
         """Just quote out stuff before sending it out"""
-        args = urlparse.parse_qs(self.handler.environ.get("QUERY_STRING"))
+        args = urllib.parse.parse_qs(self.handler.environ.get("QUERY_STRING"))
         if "i" in args:
             i = args["i"]
         else:

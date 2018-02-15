@@ -1,7 +1,7 @@
 import sys
 import re
 import gevent
-import urlparse
+import urllib.parse
 
 from gevent.pywsgi import WSGIHandler
 from socketio import transports
@@ -45,12 +45,12 @@ class SocketIOHandler(WSGIHandler):
 
         super(SocketIOHandler, self).__init__(*args, **kwargs)
 
-        self.transports = self.handler_types.keys()
+        self.transports = list(self.handler_types.keys())
         if self.server.transports:
             self.transports = self.server.transports
             if not set(self.transports).issubset(set(self.handler_types)):
                 raise ValueError("transports should be elements of: %s" %
-                    (self.handler_types.keys()))
+                    (list(self.handler_types.keys())))
 
     def _do_handshake(self, tokens):
         if tokens["resource"] != self.server.resource:
@@ -80,7 +80,7 @@ class SocketIOHandler(WSGIHandler):
         self.result = [data]
 
     def write_smart(self, data):
-        args = urlparse.parse_qs(self.environ.get("QUERY_STRING"))
+        args = urllib.parse.parse_qs(self.environ.get("QUERY_STRING"))
 
         if "jsonp" in args:
             self.write_jsonp_result(data, args["jsonp"][0])

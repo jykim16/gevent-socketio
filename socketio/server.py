@@ -109,7 +109,7 @@ class SocketIOServer(WSGIServer):
             try:
                 if not self.policy_server.started:
                     self.policy_server.start()
-            except error, ex:
+            except error as ex:
                 sys.stderr.write(
                     'FAILED to start flash policy server: %s\n' % (ex, ))
             except Exception:
@@ -174,7 +174,7 @@ def serve(app, **kw):
                             policy_server=policy_server,
                             **kw)
     if not _quiet:
-        print('serving on http://%s:%s' % (host, port))
+        print(('serving on http://%s:%s' % (host, port)))
     server.serve_forever()
 
 
