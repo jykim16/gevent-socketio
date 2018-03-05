@@ -102,14 +102,14 @@ class XHRPollingTransport(BaseTransport):
             return ''
 
         if len(messages) == 1:
-            return messages[0]
+            return messages[0].encode('utf-8')
 
         payload = ''.join([('\ufffd%d\ufffd%s' % (len(p), p))
                             for p in messages if p is not None])
         # FIXME: why is it so that we must filter None from here ?  How
         #        is it even possible that a None gets in there ?
 
-        return payload
+        return payload.encode('utf-8')
 
     def decode_payload(self, payload):
         """This function can extract multiple messages from one HTTP payload.
@@ -126,6 +126,7 @@ class XHRPollingTransport(BaseTransport):
 
         Inspired by socket.io/lib/transports/http.js
         """
+        payload = payload.decode('utf-8')
         if payload[0] == "\ufffd":
             ret = []
             while len(payload) != 0:
