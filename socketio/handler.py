@@ -61,7 +61,7 @@ class SocketIOHandler(WSGIHandler):
                                     self.config['heartbeat_timeout'] or '',
                                     self.config['close_timeout'] or '',
                                     ",".join(self.transports))
-            self.write_smart(data)
+            self.write_smart(data.encode())
 
     def write_jsonp_result(self, data, wrapper="0"):
         self.start_response("200 OK", [
@@ -74,7 +74,7 @@ class SocketIOHandler(WSGIHandler):
             ("Access-Control-Allow-Origin", self.environ.get('HTTP_ORIGIN', '*')),
             ("Access-Control-Allow-Credentials", "true"),
             ("Access-Control-Allow-Methods", "POST, GET, OPTIONS"),
-            ("Access-Control-Max-Age", 3600),
+            ("Access-Control-Max-Age", '3600'),
             ("Content-Type", "text/plain"),
         ])
         self.result = [data]
