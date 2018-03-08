@@ -61,7 +61,7 @@ class SocketIOHandler(WSGIHandler):
                                     self.config['heartbeat_timeout'] or '',
                                     self.config['close_timeout'] or '',
                                     ",".join(self.transports))
-            self.write_smart(data.encode())
+            self.write_smart(data)
 
     def write_jsonp_result(self, data, wrapper="0"):
         self.start_response("200 OK", [
@@ -85,7 +85,7 @@ class SocketIOHandler(WSGIHandler):
         if "jsonp" in args:
             self.write_jsonp_result(data, args["jsonp"][0])
         else:
-            self.write_plain_result(data)
+            self.write_plain_result(data.encode())
 
         self.process_result()
 

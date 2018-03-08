@@ -169,8 +169,8 @@ class JSONPolling(XHRPollingTransport):
         # For some reason, in case of multiple messages passed in one
         # query, IE7 sends it escaped, not utf-8 encoded. This dirty
         # hack handled it
-        if data[0] == "\\":
-            data = data.decode("unicode_escape").encode("utf-8")
+        # if data[0] == "\\":
+        #     data = data.decode("unicode_escape").encode("utf-8")
         return data
 
     def write(self, data):
