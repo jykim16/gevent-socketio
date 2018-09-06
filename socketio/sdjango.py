@@ -74,5 +74,6 @@ def socketio(request):
         logging.getLogger("socketio").error("Exception while handling socketio connection", exc_info=True)
     return HttpResponse("")
 
+app_name = "SocketIO"
 
 urls = [url(r'', socketio)]
