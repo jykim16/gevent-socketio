@@ -75,4 +75,4 @@ def socketio(request):
     return HttpResponse("")
 
 
-urls = [url(r'', societio)]
+urls = [url(r'', socketio)]
