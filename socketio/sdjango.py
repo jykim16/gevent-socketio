@@ -11,8 +11,9 @@ except ImportError:
     from importlib import import_module
 
 # for Django 1.3 support
+# patterns has been deprecated in Django 1.9
 try:
-    from django.conf.urls import patterns, url, include
+    from django.conf.urls import url, include
 except ImportError:
     from django.conf.urls.defaults import patterns, url, include
 
@@ -74,4 +75,4 @@ def socketio(request):
     return HttpResponse("")
 
 
-urls = patterns("", (r'', socketio))
+urls = [url(r'', societio)]
